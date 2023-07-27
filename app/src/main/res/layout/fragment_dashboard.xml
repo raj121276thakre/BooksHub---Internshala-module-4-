@@ -3,17 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DashboardFragment">
+
+    tools:context=".fragment.DashboardFragment">
 
 
     <TextView
         android:id="@+id/txtdashboard"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+     android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Dashboard fragment"
         android:textSize="23sp"
         android:textStyle="bold"
         />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtdashboard"
+        android:layout_margin="5dp"
+        android:padding="10dp"/>
+
 </RelativeLayout>
+
+
+
+
+
+
+

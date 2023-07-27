@@ -1,10 +1,11 @@
-package com.rajapps.bookshub
+package com.rajapps.bookshub.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.rajapps.bookshub.R
 
 
 class ProfileFragment : Fragment() {
