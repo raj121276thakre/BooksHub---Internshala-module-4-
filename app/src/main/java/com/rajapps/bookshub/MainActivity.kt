@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var toolbar : Toolbar
     lateinit var framelayout : FrameLayout
     lateinit var navigationview : NavigationView
+
+    var previousMenuItem : MenuItem? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,14 +36,68 @@ class MainActivity : AppCompatActivity() {
         navigationview = findViewById(R.id.navigationview)
 
         setUpToolbar()
+        openDashboard()
 
         val actionBarDrawerToggle = ActionBarDrawerToggle(this,drawerLayout,R.string.open_drawer, R.string.close_drawer)
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
+        openDashboard()
 
-    }
+        navigationview.setNavigationItemSelectedListener {
+
+            if (previousMenuItem != null){
+                previousMenuItem?.isChecked =false
+            }
+
+            it.isCheckable = true
+            it.isChecked = true
+            previousMenuItem = it
+
+            when(it.itemId){
+
+                R.id.dashboard-> {
+
+                    openDashboard()
+                    drawerLayout.closeDrawers()
+
+                }
+
+                R.id.favourites->{
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.framelayout, FavouritesFragment())
+                        .commit()
+
+                    supportActionBar?.title="Favourites"
+                    drawerLayout.closeDrawers()
+                }
+
+                R.id.profile->{
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.framelayout, ProfileFragment())
+                        .commit()
+
+                    supportActionBar?.title="Profile"
+                    drawerLayout.closeDrawers()
+                }
+
+                R.id.about->{
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.framelayout, AboutAppFragment())
+                        .commit()
+
+                    supportActionBar?.title="About App"
+                    drawerLayout.closeDrawers()
+                }
+
+            }
+
+            return@setNavigationItemSelectedListener true
+        }
+
+
+    } // below are functions
 
     fun setUpToolbar(){
         setSupportActionBar(toolbar)
@@ -60,7 +118,40 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun openDashboard(){
+
+        val fragment = DashboardFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.framelayout, fragment)
+        transaction.commit()
+
+        supportActionBar?.title="Dashboard"
+        navigationview.setCheckedItem(R.id.dashboard)
+    }
+
+    override fun onBackPressed() {
+
+        val frag = supportFragmentManager.findFragmentById(R.id.framelayout)
+
+        when(frag){
+            !is DashboardFragment -> openDashboard()
+
+            else ->  super.onBackPressed()
+
+        }
+
+    }
+
+
 }
+
+
+
+
+
+
+
+
 
 
 
